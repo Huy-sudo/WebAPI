@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Dynamic;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -26,7 +27,9 @@ namespace WebAPI.Controllers
             {
                 await _dbContext.AddAsync(user);
                 await _dbContext.SaveChangesAsync();
-                return Ok();
+                dynamic newUser = new ExpandoObject();
+                newUser.id = user.UserId;
+                return Ok(newUser);
             }
             catch (Exception error)
             {
