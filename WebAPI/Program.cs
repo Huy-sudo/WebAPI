@@ -1,9 +1,24 @@
+using Auth0.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using WebAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container. 
+// 1. Add Authentication Services
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.Authority = "https://dev-1du1rp5v.us.auth0.com/";
+    options.Audience = "https://colla.azurewebsites.net";
+});
+
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddDbContext<UserManagementDBContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnectionString")));
@@ -26,7 +41,8 @@ app.UseCors(x => x
             .AllowAnyMethod()
             .AllowAnyHeader());
 
-app.UseAuthorization();
+// 2. Enable authentication middleware
+app.UseAuthentication();
 
 app.MapControllers();
 

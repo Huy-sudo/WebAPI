@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Dynamic;
 using WebAPI.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Auth0.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
